@@ -1,9 +1,9 @@
 package com.jvmbytes.filter.matcher.structure;
 
-import com.jvmbytes.filter.util.BitUtils;
-import com.jvmbytes.filter.util.LazyGet;
-import com.jvmbytes.filter.util.collection.LRUCache;
-import com.jvmbytes.filter.util.collection.Pair;
+import com.jvmbytes.util.BitUtils;
+import com.jvmbytes.util.LazyGet;
+import com.jvmbytes.util.collection.LRUCache;
+import com.jvmbytes.util.collection.Pair;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.objectweb.asm.AnnotationVisitor;
@@ -14,7 +14,6 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -25,8 +24,8 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.jvmbytes.filter.matcher.structure.PrimitiveClassStructure.mappingPrimitiveByJavaClassName;
-import static com.jvmbytes.filter.util.ClassUtils.toInternalClassName;
-import static com.jvmbytes.filter.util.ClassUtils.toJavaClassName;
+import static com.jvmbytes.util.ClassUtils.toInternalClassName;
+import static com.jvmbytes.util.ClassUtils.toJavaClassName;
 import static org.objectweb.asm.ClassReader.*;
 import static org.objectweb.asm.Opcodes.*;
 
