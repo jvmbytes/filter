@@ -1,6 +1,6 @@
 package com.jvmbytes.filter.builder;
 
-import com.jvmbytes.filter.PatternType;
+import com.jvmbytes.util.PatternType;
 
 import java.util.ArrayList;
 import java.util.List;

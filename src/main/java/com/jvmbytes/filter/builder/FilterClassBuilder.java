@@ -6,9 +6,9 @@ import com.jvmbytes.filter.matcher.Matcher;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.jvmbytes.filter.util.ClassUtils.getJavaClassNameArray;
-import static com.jvmbytes.filter.util.CollectionUtils.add;
-import static com.jvmbytes.filter.util.StringUtils.toRegexQuoteArray;
+import static com.jvmbytes.util.ClassUtils.getJavaClassNameArray;
+import static com.jvmbytes.util.CollectionUtils.add;
+import static com.jvmbytes.util.StringUtils.toRegexQuoteArray;
 
 
 /**
