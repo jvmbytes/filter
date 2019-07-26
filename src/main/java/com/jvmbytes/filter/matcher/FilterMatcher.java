@@ -1,10 +1,10 @@
 package com.jvmbytes.filter.matcher;
 
+import com.jvmbytes.commons.structure.BehaviorStructure;
+import com.jvmbytes.commons.structure.ClassStructure;
+import com.jvmbytes.commons.structure.Feature;
 import com.jvmbytes.filter.AccessFlags;
 import com.jvmbytes.filter.Filter;
-import com.jvmbytes.filter.matcher.structure.BehaviorStructure;
-import com.jvmbytes.filter.matcher.structure.ClassStructure;
-import com.jvmbytes.filter.matcher.structure.Feature;
 
 import java.util.ArrayList;
 import java.util.Collection;

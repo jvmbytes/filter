@@ -1,11 +1,11 @@
 package com.jvmbytes.filter.manager;
 
+import com.jvmbytes.commons.structure.ClassStructure;
+import com.jvmbytes.commons.structure.ClassStructureFactory;
+import com.jvmbytes.commons.utils.ClassUtils;
 import com.jvmbytes.filter.matcher.MatchHandler;
 import com.jvmbytes.filter.matcher.Matcher;
 import com.jvmbytes.filter.matcher.UnsupportedMatcher;
-import com.jvmbytes.filter.matcher.structure.ClassStructure;
-import com.jvmbytes.filter.matcher.structure.ClassStructureFactory;
-import com.jvmbytes.filter.util.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

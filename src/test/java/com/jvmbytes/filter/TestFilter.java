@@ -1,15 +1,15 @@
 package com.jvmbytes.filter;
 
+import com.jvmbytes.commons.structure.BehaviorStructure;
+import com.jvmbytes.commons.structure.ClassStructure;
+import com.jvmbytes.commons.structure.ClassStructureFactory;
+import com.jvmbytes.commons.utils.ClassUtils;
 import com.jvmbytes.filter.builder.FilterBuilder;
 import com.jvmbytes.filter.manager.ClassDataSource;
 import com.jvmbytes.filter.matcher.FilterMatcher;
 import com.jvmbytes.filter.matcher.MatchHandler;
 import com.jvmbytes.filter.matcher.Matcher;
 import com.jvmbytes.filter.matcher.MatchingResult;
-import com.jvmbytes.filter.matcher.structure.BehaviorStructure;
-import com.jvmbytes.filter.matcher.structure.ClassStructure;
-import com.jvmbytes.filter.matcher.structure.ClassStructureFactory;
-import com.jvmbytes.filter.util.ClassUtils;
 import com.jvmtest.T1;
 import com.jvmtest.T2;
 import com.jvmtest.TI;
@@ -32,7 +32,7 @@ public class TestFilter {
 
         filters = new FilterBuilder().onClass("com.jvmbytes.filter.Filter")
                 .includeSubClasses().includeBootstrap().onAnyBehavior()
-                .onClass("com.jvmbytes.filter.util.*").onAnyBehavior().build();
+                .onClass("com.jvmbytes.commons.utils.*").onAnyBehavior().build();
         Assert.assertEquals(2, filters.size());
 
         Matcher matcher = FilterMatcher.toOrGroupMatcher(filters);

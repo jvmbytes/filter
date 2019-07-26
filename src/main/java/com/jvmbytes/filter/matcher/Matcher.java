@@ -1,6 +1,6 @@
 package com.jvmbytes.filter.matcher;
 
-import com.jvmbytes.filter.matcher.structure.ClassStructure;
+import com.jvmbytes.commons.structure.ClassStructure;
 
 /**
  * 匹配器

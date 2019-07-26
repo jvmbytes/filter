@@ -6,10 +6,8 @@ import com.jvmbytes.filter.matcher.Matcher;
 
 import java.util.List;
 
-import static com.jvmbytes.util.ClassUtils.getJavaClassNameArray;
-import static com.jvmbytes.util.PatternType.REGEX;
-import static com.jvmbytes.util.PatternType.WILDCARD;
-import static com.jvmbytes.util.StringUtils.toRegexQuoteArray;
+import static com.jvmbytes.commons.utils.ClassUtils.getJavaClassNameArray;
+import static com.jvmbytes.commons.utils.StringUtils.toRegexQuoteArray;
 
 
 /**

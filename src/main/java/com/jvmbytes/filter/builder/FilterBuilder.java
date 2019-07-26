@@ -1,16 +1,16 @@
 package com.jvmbytes.filter.builder;
 
+import com.jvmbytes.commons.utils.PatternType;
 import com.jvmbytes.filter.Filter;
 import com.jvmbytes.filter.matcher.FilterMatcher;
 import com.jvmbytes.filter.matcher.Matcher;
-import com.jvmbytes.util.PatternType;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.jvmbytes.util.ClassUtils.getJavaClassName;
-import static com.jvmbytes.util.CollectionUtils.add;
-import static com.jvmbytes.util.StringUtils.patternMatching;
+import static com.jvmbytes.commons.utils.ClassUtils.getJavaClassName;
+import static com.jvmbytes.commons.utils.CollectionUtils.add;
+import static com.jvmbytes.commons.utils.StringUtils.patternMatching;
 import static java.util.regex.Pattern.quote;
 
 /**

@@ -1,16 +1,16 @@
 package com.jvmbytes.filter.matcher;
 
+import com.jvmbytes.commons.structure.BehaviorStructure;
+import com.jvmbytes.commons.structure.ClassStructure;
+import com.jvmbytes.commons.structure.Feature;
 import com.jvmbytes.filter.annotation.Stealth;
-import com.jvmbytes.filter.matcher.structure.BehaviorStructure;
-import com.jvmbytes.filter.matcher.structure.ClassStructure;
-import com.jvmbytes.filter.matcher.structure.Feature;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import static com.jvmbytes.filter.matcher.structure.ClassStructureFactory.createClassStructure;
+import static com.jvmbytes.commons.structure.ClassStructureFactory.createClassStructure;
 
 
 /**

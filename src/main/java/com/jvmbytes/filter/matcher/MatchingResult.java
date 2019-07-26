@@ -1,6 +1,6 @@
 package com.jvmbytes.filter.matcher;
 
-import com.jvmbytes.filter.matcher.structure.BehaviorStructure;
+import com.jvmbytes.commons.structure.BehaviorStructure;
 
 import java.util.LinkedHashSet;
 

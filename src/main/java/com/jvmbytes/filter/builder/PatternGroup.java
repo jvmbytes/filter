@@ -1,10 +1,10 @@
 package com.jvmbytes.filter.builder;
 
 
-import com.jvmbytes.util.ArrayUtils;
-import com.jvmbytes.util.PatternType;
+import com.jvmbytes.commons.utils.ArrayUtils;
+import com.jvmbytes.commons.utils.PatternType;
 
-import static com.jvmbytes.util.StringUtils.patternMatching;
+import static com.jvmbytes.commons.utils.StringUtils.patternMatching;
 
 /**
  * 模式匹配组
