@@ -148,11 +148,28 @@ public class FilterMatcher implements Matcher {
      * @return Or关系Matcher
      */
     public static Matcher toOrGroupMatcher(final List<Filter> filterArray) {
+        return new OrMatcher(toArray(filterArray));
+    }
+
+    /**
+     * 将{@link Filter}数组转换为Or关系的Matcher
+     *
+     * @param filterArray 过滤器数组
+     * @return And关系Matcher
+     */
+    public static Matcher toAndGroupMatcher(final List<Filter> filterArray) {
+        if (filterArray.size() == 1) {
+            return new FilterMatcher(filterArray.get(0));
+        }
+        return new AndMatcher(toArray(filterArray));
+    }
+
+    private static Matcher[] toArray(List<Filter> filterArray) {
         final Matcher[] matcherArray = new Matcher[filterArray.size()];
         for (int index = 0; index < matcherArray.length; index++) {
             matcherArray[index] = new FilterMatcher(filterArray.get(index));
         }
-        return new OrMatcher(matcherArray);
+        return matcherArray;
     }
 
 }
