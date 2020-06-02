@@ -10,9 +10,9 @@ import com.jvmbytes.filter.matcher.FilterMatcher;
 import com.jvmbytes.filter.matcher.MatchHandler;
 import com.jvmbytes.filter.matcher.Matcher;
 import com.jvmbytes.filter.matcher.MatchingResult;
-import com.jvmtest.T1;
-import com.jvmtest.T2;
-import com.jvmtest.TI;
+import com.jbytes.spy.enhance.T1;
+import com.jbytes.spy.enhance.T2;
+import com.jbytes.spy.enhance.TI;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -60,6 +60,16 @@ public class TestFilter {
         LinkedHashSet<String> behaviorSignCodes = result.getBehaviorSignCodes();
         for (String code : behaviorSignCodes) {
             System.out.println(code);
+        }
+    }
+
+    @Test
+    public void TestClassBehaviorStructures() {
+        ClassStructure classStructure = ClassStructureFactory.createClassStructure(ClassDataSource.class);
+        System.out.println("--------> behavior structures");
+        List<BehaviorStructure> behaviorStructures = classStructure.getBehaviorStructures();
+        for (BehaviorStructure structure : behaviorStructures) {
+            System.out.println(structure);
         }
     }
 
