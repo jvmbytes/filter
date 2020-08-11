@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.jvmbytes</groupId>
     <artifactId>filter</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <packaging>jar</packaging>
     <name>jvmbytes class filter</name>
     <description>jvmbytes class search and filter</description>
@@ -48,7 +48,7 @@
         <dependency>
             <groupId>com.jvmbytes.commons</groupId>
             <artifactId>structure</artifactId>
-            <version>1.0.0</version>
+            <version>1.1.0</version>
         </dependency>
         <dependency>
             <groupId>org.ow2.asm</groupId>

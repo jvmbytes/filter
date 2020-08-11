@@ -8,6 +8,7 @@ import com.jvmbytes.filter.annotation.Stealth;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.WeakHashMap;
 
 import static com.jvmbytes.commons.structure.ClassStructureFactory.createClassStructure;
 
@@ -17,30 +18,21 @@ import static com.jvmbytes.commons.structure.ClassStructureFactory.createClassSt
  *
  * @author luanjia
  */
-public class UnsupportedMatcher implements Matcher {
-
-    private final ClassLoader loader;
-    private final boolean isEnableUnsafe;
-
-    public UnsupportedMatcher(final ClassLoader loader,
-                              final boolean isEnableUnsafe) {
-        this.loader = loader;
-        this.isEnableUnsafe = isEnableUnsafe;
-    }
+public class UnsupportedMatcher {
 
     /**
      * 是否因本身缺陷所暂时无法支持的类
      */
-    private boolean isUnsupportedClass(final ClassStructure classStructure) {
-        return containsAny(
-                classStructure.getJavaClassName(),
+    public static boolean isUnsupportedClass(String className) {
+        return isJvmBytesClass(className)
+                || containsAny(className,
                 "$$Lambda$",
                 "$$FastClassBySpringCGLIB$$",
                 "$$EnhancerBySpringCGLIB$$"
         );
     }
 
-    private boolean containsAny(String s, final String... checks) {
+    private static boolean containsAny(String s, final String... checks) {
         for (final String c : checks) {
             if (s.contains(c)) {
                 return true;
@@ -53,11 +45,11 @@ public class UnsupportedMatcher implements Matcher {
      * 是否是本身的类
      * 因为多命名空间的原因，所以这里不能简单的用ClassLoader来进行判断
      */
-    private boolean isJvmBytesClass(final ClassStructure classStructure) {
-        return classStructure.getJavaClassName().startsWith("com.jvmbytes.");
+    private static boolean isJvmBytesClass(String className) {
+        return className.startsWith("com.jvmbytes.");
     }
 
-    private Set<String> takeJavaClassNames(final Set<ClassStructure> classStructures) {
+    private static Set<String> takeJavaClassNames(final Set<ClassStructure> classStructures) {
         final Set<String> javaClassNames = new LinkedHashSet<String>();
         for (final ClassStructure classStructure : classStructures) {
             javaClassNames.add(classStructure.getJavaClassName());
@@ -68,20 +60,36 @@ public class UnsupportedMatcher implements Matcher {
     /**
      * 判断是否隐形类
      */
-    private boolean isStealthClass(final ClassStructure classStructure) {
+    public static boolean isStealthClass(final ClassStructure classStructure) {
         return takeJavaClassNames(classStructure.getFamilyTypeClassStructures())
                 .contains(Stealth.class.getName());
     }
 
+
+    /**
+     * 存放classloader是否支持缓存信息
+     */
+    private static final WeakHashMap<ClassLoader, Boolean> classLoaderSupportedMap
+            = new WeakHashMap<ClassLoader, Boolean>();
+
     /**
      * 判断是否ClassLoader家族中是否有隐形基因
+     *
+     * @param loader
+     * @param isEnableUnsafe
      */
-    private boolean isFromStealthClassLoader() {
+    public static boolean isFromStealthClassLoader(ClassLoader loader, boolean isEnableUnsafe) {
         if (null == loader) {
             return !isEnableUnsafe;
         }
-        return takeJavaClassNames(createClassStructure(loader.getClass()).getFamilyTypeClassStructures())
+        Boolean supported = classLoaderSupportedMap.get(loader);
+        if (supported != null) {
+            return supported;
+        }
+        supported = takeJavaClassNames(createClassStructure(loader.getClass()).getFamilyTypeClassStructures())
                 .contains(Stealth.class.getName());
+        classLoaderSupportedMap.put(loader, supported);
+        return supported;
     }
 
     /**
@@ -89,7 +97,7 @@ public class UnsupportedMatcher implements Matcher {
      * 这个函数如果被增强了会引起错误,所以千万不能增强,嗯嗯
      * public static void main(String[]);
      */
-    private boolean isJavaMainBehavior(final BehaviorStructure behaviorStructure) {
+    private static boolean isJavaMainBehavior(final BehaviorStructure behaviorStructure) {
         final Feature feature = behaviorStructure.getFeature();
         final List<ClassStructure> parameterTypeClassStructures = behaviorStructure.getParameterTypeClassStructures();
         return feature.isPublic()
@@ -102,47 +110,14 @@ public class UnsupportedMatcher implements Matcher {
 
     /**
      * 是否不支持的方法修饰
-     * 1. abstract的方法没有实现，没有必要增强
-     * 2. native的方法暂时无法支持
+     * 1. 是否main方法
+     * 2. abstract的方法没有实现，没有必要增强
+     * 3. native的方法暂时无法支持
      */
-    private boolean isUnsupportedBehavior(final BehaviorStructure behaviorStructure) {
-        final Feature feature = behaviorStructure.getFeature();
-        return feature.isAbstract()
-                || feature.isNative();
-    }
-
-    @Override
-    public MatchingResult matching(final ClassStructure classStructure) {
-        final MatchingResult result = new MatchingResult();
-        if (isUnsupportedClass(classStructure)
-                || isJvmBytesClass(classStructure)
-                || isFromStealthClassLoader()
-                || isStealthClass(classStructure)) {
-            return result;
-        }
-        for (final BehaviorStructure behaviorStructure : classStructure.getBehaviorStructures()) {
-            if (isJavaMainBehavior(behaviorStructure)
-                    || isUnsupportedBehavior(behaviorStructure)) {
-                continue;
-            }
-            result.getBehaviorStructures().add(behaviorStructure);
-        }
-        return result;
-    }
-
-
-    /**
-     * 构造AND关系的组匹配
-     * <p>
-     * 一般{@link UnsupportedMatcher}都与其他Matcher配合使用，
-     * 所以这里对AND关系做了一层封装
-     * </p>
-     *
-     * @param matcher 发生AND关系的{@link Matcher}
-     * @return GroupMatcher.and(matcher, this)
-     */
-    public Matcher and(final Matcher matcher) {
-        return new AndMatcher(matcher, this);
+    public static boolean isUnsupportedBehavior(final BehaviorStructure behaviorStructure) {
+        return isJavaMainBehavior(behaviorStructure)
+                || behaviorStructure.getFeature().isAbstract()
+                || behaviorStructure.getFeature().isNative();
     }
 
 }

@@ -5,6 +5,7 @@ import com.jvmbytes.commons.structure.ClassStructureFactory;
 import com.jvmbytes.commons.utils.ClassUtils;
 import com.jvmbytes.filter.matcher.MatchHandler;
 import com.jvmbytes.filter.matcher.Matcher;
+import com.jvmbytes.filter.matcher.MatchingResult;
 import com.jvmbytes.filter.matcher.UnsupportedMatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,21 +46,25 @@ public class ClassDataSource {
                     && !inst.isModifiableClass(clazz)) {
                 continue;
             }
+
             try {
-                ClassStructure classStructure = ClassStructureFactory.createClassStructure(clazz);
                 if (isRemoveUnsupported) {
-                    if (new UnsupportedMatcher(clazz.getClassLoader(), isEnableUnsafe)
-                            .and(matcher)
-                            .matching(classStructure)
-                            .isMatched()) {
-                        handler.handle(clazz, classStructure);
-                    }
-                } else {
-                    if (matcher.matching(classStructure).isMatched()) {
-                        handler.handle(clazz, classStructure);
+                    if (UnsupportedMatcher.isUnsupportedClass(clazz.getName()) ||
+                            UnsupportedMatcher.isFromStealthClassLoader(clazz.getClassLoader(), isEnableUnsafe)) {
+                        continue;
                     }
                 }
 
+                ClassStructure classStructure = ClassStructureFactory.createClassStructure(clazz);
+
+                if (isRemoveUnsupported && UnsupportedMatcher.isStealthClass(classStructure)) {
+                    continue;
+                }
+
+                MatchingResult result = matcher.matching(classStructure, isRemoveUnsupported);
+                if (result != null && result.isMatched()) {
+                    handler.handle(clazz, classStructure);
+                }
             } catch (Throwable cause) {
                 // 在这里可能会遇到非常坑爹的模块卸载错误
                 // 当一个URLClassLoader被动态关闭之后，但JVM已经加载的类并不知情（因为没有GC）

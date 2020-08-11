@@ -24,8 +24,8 @@ public class TestServiceFilter {
         Iterator<Class<?>> classes = ClassUtils.iterateCurrentClassLoaderClasses();
         while (classes.hasNext()) {
             Class clazz = classes.next();
-            MatchingResult result = matcher.matching(ClassStructureFactory.createClassStructure(clazz));
-            if (result.isMatched()) {
+            MatchingResult result = matcher.matching(ClassStructureFactory.createClassStructure(clazz), true);
+            if (result != null && result.isMatched()) {
                 System.out.println(result.getBehaviorSignCodes());
             }
         }

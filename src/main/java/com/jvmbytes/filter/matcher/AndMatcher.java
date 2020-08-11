@@ -15,18 +15,19 @@ public final class AndMatcher extends AbstractGroupMatcher {
     }
 
     @Override
-    public MatchingResult matching(ClassStructure classStructure) {
+    public MatchingResult matching(ClassStructure classStructure, boolean removeUnsupportedBehavior) {
+        if (null == matcherArray) {
+            return null;
+        }
+
         boolean isFirst = true;
         final MatchingResult result = new MatchingResult();
         final LinkedHashSet<BehaviorStructure> found = new LinkedHashSet<BehaviorStructure>();
-        if (null == matcherArray) {
-            return result;
-        }
         for (final Matcher subMatcher : matcherArray) {
-            final MatchingResult subResult = subMatcher.matching(classStructure);
+            final MatchingResult subResult = subMatcher.matching(classStructure, removeUnsupportedBehavior);
 
             // 只要有一次匹配失败，剩下的是取交集运算，所以肯定也没戏，就不用花这个计算了
-            if (!subResult.isMatched()) {
+            if (subResult == null || !subResult.isMatched()) {
                 return result;
             }
 

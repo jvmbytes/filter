@@ -1,5 +1,8 @@
 package com.jvmbytes.filter;
 
+import com.jbytes.spy.enhance.T1;
+import com.jbytes.spy.enhance.T2;
+import com.jbytes.spy.enhance.TI;
 import com.jvmbytes.commons.structure.BehaviorStructure;
 import com.jvmbytes.commons.structure.ClassStructure;
 import com.jvmbytes.commons.structure.ClassStructureFactory;
@@ -10,9 +13,6 @@ import com.jvmbytes.filter.matcher.FilterMatcher;
 import com.jvmbytes.filter.matcher.MatchHandler;
 import com.jvmbytes.filter.matcher.Matcher;
 import com.jvmbytes.filter.matcher.MatchingResult;
-import com.jbytes.spy.enhance.T1;
-import com.jbytes.spy.enhance.T2;
-import com.jbytes.spy.enhance.TI;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -39,8 +39,8 @@ public class TestFilter {
         Iterator<Class<?>> classes = ClassUtils.iterateCurrentClassLoaderClasses();
         while (classes.hasNext()) {
             Class clazz = classes.next();
-            boolean matched = matcher.matching(ClassStructureFactory.createClassStructure(clazz)).isMatched();
-            if (matched) {
+            MatchingResult result = matcher.matching(ClassStructureFactory.createClassStructure(clazz), true);
+            if (result != null && result.isMatched()) {
                 System.out.println(clazz.getName());
             }
         }
@@ -52,9 +52,9 @@ public class TestFilter {
                 .includeSubClasses().includeBootstrap().onAnyBehavior().matcher();
 
         ClassStructure classStructure = ClassStructureFactory.createClassStructure(FilterMatcher.class);
-        MatchingResult result = matcher.matching(classStructure);
+        MatchingResult result = matcher.matching(classStructure, true);
 
-        Assert.assertTrue(result.isMatched());
+        Assert.assertTrue(result != null && result.isMatched());
 
         System.out.println("--------> behavior sign codes");
         LinkedHashSet<String> behaviorSignCodes = result.getBehaviorSignCodes();

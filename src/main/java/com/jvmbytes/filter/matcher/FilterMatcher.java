@@ -70,22 +70,30 @@ public class FilterMatcher implements Matcher {
     }
 
     @Override
-    public MatchingResult matching(final ClassStructure classStructure) {
+    public MatchingResult matching(final ClassStructure classStructure, boolean removeUnsupportedBehavior) {
+        // 1. 如果不开启加载Bootstrap的类，遇到就过滤掉
+        if (!filter.isIncludeBootstrap() && classStructure.getClassLoader() == null) {
+            return null;
+        }
+
+        // 2. 忽略隐形类
+        if (UnsupportedMatcher.isStealthClass(classStructure)) {
+            return null;
+        }
+
+        // 3. 匹配ClassStructure
+        if (!matchingClassStructure(classStructure)) {
+            return null;
+        }
+
         final MatchingResult result = new MatchingResult();
 
-        // 1. 匹配ClassStructure
-        if (!matchingClassStructure(classStructure)) {
-            return result;
-        }
-
-        // 如果不开启加载Bootstrap的类，遇到就过滤掉
-        if (!filter.isIncludeBootstrap()
-                && classStructure.getClassLoader() == null) {
-            return result;
-        }
-
-        // 2. 匹配BehaviorStructure
+        // 4. 匹配BehaviorStructure
         for (final BehaviorStructure behaviorStructure : classStructure.getBehaviorStructures()) {
+            if (removeUnsupportedBehavior && UnsupportedMatcher.isUnsupportedBehavior(behaviorStructure)) {
+                continue;
+            }
+
             if (filter.doMethodFilter(
                     toFilterAccess(behaviorStructure.getFeature()),
                     behaviorStructure.getName(),

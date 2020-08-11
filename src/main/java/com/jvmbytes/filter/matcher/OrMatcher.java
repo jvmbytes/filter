@@ -12,13 +12,18 @@ public final class OrMatcher extends AbstractGroupMatcher {
     }
 
     @Override
-    public MatchingResult matching(final ClassStructure classStructure) {
-        final MatchingResult result = new MatchingResult();
+    public MatchingResult matching(final ClassStructure classStructure, boolean removeUnsupportedBehavior) {
         if (null == matcherArray) {
-            return result;
+            return null;
         }
+
+        final MatchingResult result = new MatchingResult();
         for (final Matcher subMatcher : matcherArray) {
-            result.getBehaviorStructures().addAll(subMatcher.matching(classStructure).getBehaviorStructures());
+            MatchingResult subResult = subMatcher.matching(classStructure, removeUnsupportedBehavior);
+            if (subResult == null || !subResult.isMatched()) {
+                continue;
+            }
+            result.getBehaviorStructures().addAll(subResult.getBehaviorStructures());
         }
         return result;
     }

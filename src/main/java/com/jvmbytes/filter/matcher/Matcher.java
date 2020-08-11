@@ -15,9 +15,11 @@ public interface Matcher {
     /**
      * 匹配类结构
      *
-     * @param classStructure 类结构
+     * @param classStructure            类结构
+     * @param removeUnsupportedBehavior 是否剔除不支持的方法
      * @return 匹配结果
      */
-    MatchingResult matching(ClassStructure classStructure);
+    MatchingResult matching(ClassStructure classStructure, boolean removeUnsupportedBehavior);
+
 
 }
