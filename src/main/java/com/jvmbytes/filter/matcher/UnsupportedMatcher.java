@@ -4,7 +4,6 @@ import com.jvmbytes.commons.structure.BehaviorStructure;
 import com.jvmbytes.commons.structure.ClassStructure;
 import com.jvmbytes.commons.structure.Feature;
 import com.jvmbytes.filter.annotation.Stealth;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -33,12 +32,21 @@ public class UnsupportedMatcher implements Matcher {
      * 是否因本身缺陷所暂时无法支持的类
      */
     private boolean isUnsupportedClass(final ClassStructure classStructure) {
-        return StringUtils.containsAny(
+        return containsAny(
                 classStructure.getJavaClassName(),
                 "$$Lambda$",
                 "$$FastClassBySpringCGLIB$$",
                 "$$EnhancerBySpringCGLIB$$"
         );
+    }
+
+    private boolean containsAny(String s, final String... checks) {
+        for (final String c : checks) {
+            if (s.contains(c)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

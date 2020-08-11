@@ -55,7 +55,7 @@ public class ClassDataSource {
                         handler.handle(clazz, classStructure);
                     }
                 } else {
-                    if (matcher.matching(ClassStructureFactory.createClassStructure(clazz)).isMatched()) {
+                    if (matcher.matching(classStructure).isMatched()) {
                         handler.handle(clazz, classStructure);
                     }
                 }
